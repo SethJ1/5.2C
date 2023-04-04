@@ -1,0 +1,54 @@
+import RPi.GPIO as GPIO
+from tkinter import *
+
+# Define the GPIO pins for the LEDs
+RED_LED_PIN = 4
+GREEN_LED_PIN = 24
+BLUE_LED_PIN = 18
+
+# Initialize the GPIO library
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RED_LED_PIN, GPIO.OUT)
+GPIO.setup(GREEN_LED_PIN, GPIO.OUT)
+GPIO.setup(BLUE_LED_PIN, GPIO.OUT)
+
+# Define the function to handle the radio button selection event
+def handle_radio_button():
+    selected_led = led_var.get()
+    if selected_led == 1:
+        GPIO.output(RED_LED_PIN, GPIO.HIGH)
+        GPIO.output(GREEN_LED_PIN, GPIO.LOW)
+        GPIO.output(BLUE_LED_PIN, GPIO.LOW)
+    elif selected_led == 2:
+        GPIO.output(RED_LED_PIN, GPIO.LOW)
+        GPIO.output(GREEN_LED_PIN, GPIO.HIGH)
+        GPIO.output(BLUE_LED_PIN, GPIO.LOW)
+    elif selected_led == 3:
+        GPIO.output(RED_LED_PIN, GPIO.LOW)
+        GPIO.output(GREEN_LED_PIN, GPIO.LOW)
+        GPIO.output(BLUE_LED_PIN, GPIO.HIGH)
+
+# Define the function to handle the exit button event
+def handle_exit_button():
+    GPIO.cleanup()
+    root.destroy()
+
+# Create the GUI window
+root = Tk()
+root.title("LED Control")
+
+# Create the radio buttons and the exit button
+led_var = IntVar()
+red_led_rb = Radiobutton(root, text="Red LED", variable=led_var, value=1, command=handle_radio_button)
+green_led_rb = Radiobutton(root, text="Green LED", variable=led_var, value=2, command=handle_radio_button)
+blue_led_rb = Radiobutton(root, text="Blue LED", variable=led_var, value=3, command=handle_radio_button)
+exit_button = Button(root, text="Exit", command=handle_exit_button)
+
+# Add the radio buttons and the exit button to the GUI window
+red_led_rb.pack()
+green_led_rb.pack()
+blue_led_rb.pack()
+exit_button.pack()
+
+# Start the main loop of the GUI
+root.mainloop()
